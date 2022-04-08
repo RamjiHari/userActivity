@@ -75,8 +75,8 @@ export default function ActivityScreen () {
         }
     }
     return (
-        <View>
-            <View style={styles.activityItemContainer} >
+        <View style={styles.activityItemContainer} >
+            < >
                 <Text style={[styles.headingText, { fontSize: 18 }]}>Select what you are doing</Text>
                 <View style={styles.listConatiner} >
                     {
@@ -102,7 +102,7 @@ export default function ActivityScreen () {
                         } )
                     }
                 </View>
-            </View>
+            </>
             <View style={styles.timerSection}>
                 <Text style={styles.headingText}>Start tracking</Text>
                 <AntDesign name={timerStart ? "pausecircle" : "play"} size={40} color="black" style={{ alignSelf: 'center' }} onPress={() => { tracktime( activityItems ) }} />
@@ -162,8 +162,8 @@ export default function ActivityScreen () {
 const styles = StyleSheet.create( {
     activityItemContainer: {
         flex: 1,
-        marginTop: 50,
-        paddingHorizontal: 50,
+        marginTop: 20,
+        paddingHorizontal: 25,
     },
     headingText: {
         textAlign: 'center',
