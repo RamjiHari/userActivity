@@ -4,7 +4,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { colors } from './Colors';
 // import axios from 'axios';
 export default function ActivityScreen () {
     const [activityItems, setActivityItems] = useState( [
@@ -86,7 +85,7 @@ export default function ActivityScreen () {
                                 <View key={item.title}>
                                     <TouchableOpacity
                                         activeOpacity={0.6}
-                                        style={[styles.button, { backgroundColor: item.expand ? 'yellow' : colors.defaultYellow }]}
+                                        style={[styles.button, { backgroundColor: item.expand ? 'yellow' : 'orange' }]}
                                         onPress={() => toggleExpand( item.title, item.expand, timerStart, 'toggle' )}
                                     >
                                         {item.title == 'Running' ?
