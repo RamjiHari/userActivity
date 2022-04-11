@@ -2,21 +2,41 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, StatusBar, Keyboard } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { colors } from './Colors';
+import { AuthContext } from './Context';
+import { fetchApi } from './api';
+import { config } from '../../config';
 export default function Loginscreen() {
 
   const navigation = useNavigation();
-  const [username,setusername] = useState("admin");
+  const [username,setusername] = useState("ramesh");
   const [password,setpassword] = useState("goodluck");
+  const User = React.useContext(AuthContext);
 
-  const onLogin = () => {
+  const onLogin = async() => {
     Keyboard.dismiss()
     if(username && password){
-      navigation.navigate('Home')
+      let dataTime = new Date()
+      const data={
+        "request":"loginUser",
+        "username" : username,
+        "password" : password,
+        "dataTime" : dataTime
+    }
+    console.log('data', data)
+    const response = await fetchApi(config.TEST+'loginUser',data);
+    console.log('first', response)
+    if (response.data.status == 'success'){
+    User.setUserToken(response.data.user.id)
+    User.setUserDetail(response.data.user)
     }else{
+      alert('failed')
+    }
+     }
+    else{
       alert('Wrong Input! UserName or password field cannot be empty.')
     }
   }
-
+  
   return (
     <View style={styles.container}>
       <StatusBar

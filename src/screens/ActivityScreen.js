@@ -4,31 +4,36 @@ import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-// import axios from 'axios';
+import { fetchApi } from './api';
+import { config } from '../../config';
+import { AuthContext } from './Context';
+import { colors } from './Colors';
 export default function ActivityScreen () {
+
+    const Users = React.useContext(AuthContext);
+    const cust_id = Users.userDetail.id
+    const userName = Users.userDetail.name
+    const [actId , setActId] =useState('')
+    console.log(`Usersqqqqq`, Users)
+
     const [activityItems, setActivityItems] = useState( [
         { title: 'Running' }, { title: 'Cooking' }, { title: 'Working' }, { title: 'Reading' }, { title: 'Walking' }, { title: 'Sleeping' },
     ] )
     const [timerStart, setTimerStart] = useState( false )
 
-    // useEffect(() => {
-    //     const source = axios.CancelToken.source();
-    //     const url = `${baseUrl}/api/users/${userId}`;
-    //     const fetchUsers = async () => {
-    //       try {
-    //         const response = await axios.get(url, { cancelToken: source.token });
-    //         console.log(response.data);
-    //       } catch (error) {
-    //         if(axios.isCancel(error)){
-    //           console.log('Data fetching cancelled');
-    //         }else{
-    //          // Handle error
-    //         }
-    //       }
-    //     };
-    //     fetchUsers();
-    //     return () => source.cancel("Data fetching cancelled");
-    //   }, [userId]);
+    const fetchActivity = async (title,id) => {
+      let dataTime = new Date()
+        const data={
+            "time": dataTime,
+            "activity": title,
+            "cust_id": id,
+            "actId" : actId
+        }
+        console.log('data', data)
+        const response = await fetchApi(config.TEST+'insertActivity',data);
+        console.log(response.data,"lllll");
+        setActId(response.data.actId)
+      };
 
     const toggleExpand = ( title, expand, timerStart, key ) => {
         if ( timerStart && key == 'toggle' ) {
@@ -61,9 +66,14 @@ export default function ActivityScreen () {
                     let curentActivityTitle = filterData[0].title
                     let curentActivityexpand = filterData[0].expand
                     toggleExpand( curentActivityTitle, curentActivityexpand, timerStart, 'trackTime' )
+                    fetchActivity(curentActivityTitle,cust_id)
                 } else {
                     alert( 'timer is running' )
                     setTimerStart( true )
+                    const newArray = [...items];
+                    const filterData = newArray.filter( ( e ) => e.expand == true )
+                    let curentActivityTitle = filterData[0].title
+                    fetchActivity(curentActivityTitle,cust_id)
                 }
 
             } else {
@@ -74,8 +84,21 @@ export default function ActivityScreen () {
             alert( 'please choose activity' )
         }
     }
+
     return (
+        <>
+        <View style={styles.welcomeContainer}>
+            <View style={{flex:2}}>
+            <Text style={styles.welcomeText}>welcome {userName}</Text>
+            </View>
+            <TouchableOpacity style={styles.logOutContainer} onPress = {()=>Users.setUserToken(null)}>
+            <AntDesign name="logout" size={24} color="black" />
+            <Text style={styles.logOutText}>logout</Text>
+            </TouchableOpacity>
+            </View>
         <View style={styles.activityItemContainer} >
+            
+
             < >
                 <Text style={[styles.headingText, { fontSize: 18 }]}>Select what you are doing</Text>
                 <View style={styles.listConatiner} >
@@ -102,8 +125,10 @@ export default function ActivityScreen () {
                         } )
                     }
                 </View>
+                
             </>
             <View style={styles.timerSection}>
+
                 <Text style={styles.headingText}>Start tracking</Text>
                 <AntDesign name={timerStart ? "pausecircle" : "play"} size={40} color="black" style={{ alignSelf: 'center' }} onPress={() => { tracktime( activityItems ) }} />
             </View>
@@ -156,14 +181,37 @@ export default function ActivityScreen () {
                 </ScrollView>
             </View>
         </View>
+        </>
     )
 }
 
 const styles = StyleSheet.create( {
     activityItemContainer: {
         flex: 1,
-        marginTop: 20,
+        marginTop: 10,
         paddingHorizontal: 25,
+    },
+    welcomeContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        backgroundColor:'orange'
+    },
+    welcomeText: {
+        textAlign:'center',
+        fontSize:18,
+        marginLeft:60,
+        color:colors.defaultWhite
+    },
+    logOutContainer: {
+        flex:0.5,
+        flexDirection:'row',
+        justifyContent:'space-evenly'
+    },
+    logOutText: {
+        textAlign:'center',
+        fontSize:12,
+        marginTop:3,
+        color:colors.defaultWhite
     },
     headingText: {
         textAlign: 'center',
@@ -202,7 +250,7 @@ const styles = StyleSheet.create( {
         fontSize: 13
     },
     timerSection: {
-        marginTop: 50,
+        // marginTop: 50,
         paddingBottom: 20,
         marginHorizontal: 20,
     },
