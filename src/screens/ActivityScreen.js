@@ -4,13 +4,14 @@ import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Timer from './Timer';
 // import axios from 'axios';
 export default function ActivityScreen () {
     const [activityItems, setActivityItems] = useState( [
         { title: 'Running' }, { title: 'Cooking' }, { title: 'Working' }, { title: 'Reading' }, { title: 'Walking' }, { title: 'Sleeping' },
     ] )
     const [timerStart, setTimerStart] = useState( false )
-
+console.log('timerStart', timerStart)
     // useEffect(() => {
     //     const source = axios.CancelToken.source();
     //     const url = `${baseUrl}/api/users/${userId}`;
@@ -74,8 +75,13 @@ export default function ActivityScreen () {
             alert( 'please choose activity' )
         }
     }
+    useEffect(() => {
+alert("ll")
+    }, [timerStart])
+
     return (
         <View style={styles.activityItemContainer} >
+
             < >
                 <Text style={[styles.headingText, { fontSize: 18 }]}>Select what you are doing</Text>
                 <View style={styles.listConatiner} >
@@ -107,7 +113,7 @@ export default function ActivityScreen () {
                 <Text style={styles.headingText}>Start tracking</Text>
                 <AntDesign name={timerStart ? "pausecircle" : "play"} size={40} color="black" style={{ alignSelf: 'center' }} onPress={() => { tracktime( activityItems ) }} />
             </View>
-
+            {timerStart && <Timer start={timerStart}/>}
             <View style={styles.trackRecordSection}>
                 <View style={styles.trackRecordHeadingSection}>
                     <Text style={[styles.headingText, { paddingVertical: 5 }]}>Time tracked</Text>
