@@ -61,7 +61,7 @@ export default function ActivityScreen () {
             if ( findTrueExpand ) {
 
                 if ( timerStart ) {
-                    alert( 'timer is stop' )
+
                     setTimerStart( false )
                     const newArray = [...items];
                     const filterData = newArray.filter( ( e ) => e.expand == true )
@@ -70,7 +70,7 @@ export default function ActivityScreen () {
                     toggleExpand( curentActivityTitle, curentActivityexpand, timerStart, 'trackTime' )
                     fetchActivity(curentActivityTitle,cust_id)
                 } else {
-                    alert( 'timer is running' )
+
                     setTimerStart( true )
                     const newArray = [...items];
                     const filterData = newArray.filter( ( e ) => e.expand == true )
@@ -128,14 +128,17 @@ export default function ActivityScreen () {
                         } )
                     }
                 </View>
-                
+
             </>
             <View style={styles.timerSection}>
 
                 <Text style={styles.headingText}>Start tracking</Text>
                 <AntDesign name={timerStart ? "pausecircle" : "play"} size={40} color="black" style={{ alignSelf: 'center' }} onPress={() => { tracktime( activityItems ) }} />
+                <View style={{alignContent:'center' ,justifyContent:'center',alignSelf:'center',marginTop:5}}>
+           {timerStart && <Timer start={timerStart}/>}
+           </View>
             </View>
-            {timerStart && <Timer start={timerStart}/>}
+
             <View style={styles.trackRecordSection}>
                 <View style={styles.trackRecordHeadingSection}>
                     <Text style={[styles.headingText, { paddingVertical: 5 }]}>Time tracked</Text>
