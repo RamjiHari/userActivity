@@ -86,9 +86,8 @@ export default function ActivityScreen () {
             alert( 'please choose activity' )
         }
     }
-    useEffect(() => {
-alert("ll")
-    }, [timerStart])
+    // useEffect(() => {
+    // }, [timerStart])
 
     return (
         <>
