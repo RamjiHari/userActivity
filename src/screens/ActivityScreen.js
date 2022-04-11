@@ -8,6 +8,8 @@ import { fetchApi } from './api';
 import { config } from '../../config';
 import { AuthContext } from './Context';
 import { colors } from './Colors';
+import Timer from './Timer';
+// import axios from 'axios';
 export default function ActivityScreen () {
 
     const Users = React.useContext(AuthContext);
@@ -84,6 +86,9 @@ export default function ActivityScreen () {
             alert( 'please choose activity' )
         }
     }
+    useEffect(() => {
+alert("ll")
+    }, [timerStart])
 
     return (
         <>
@@ -97,7 +102,6 @@ export default function ActivityScreen () {
             </TouchableOpacity>
             </View>
         <View style={styles.activityItemContainer} >
-            
 
             < >
                 <Text style={[styles.headingText, { fontSize: 18 }]}>Select what you are doing</Text>
@@ -132,7 +136,7 @@ export default function ActivityScreen () {
                 <Text style={styles.headingText}>Start tracking</Text>
                 <AntDesign name={timerStart ? "pausecircle" : "play"} size={40} color="black" style={{ alignSelf: 'center' }} onPress={() => { tracktime( activityItems ) }} />
             </View>
-
+            {timerStart && <Timer start={timerStart}/>}
             <View style={styles.trackRecordSection}>
                 <View style={styles.trackRecordHeadingSection}>
                     <Text style={[styles.headingText, { paddingVertical: 5 }]}>Time tracked</Text>
