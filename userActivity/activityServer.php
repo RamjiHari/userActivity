@@ -1,7 +1,7 @@
 <?php
 include './db_config.php';
 
-
+// echo $_REQUEST['request'];die;
 
 if($_REQUEST['request']=='loginUser'){
     $data = json_decode(file_get_contents('php://input'), true);
@@ -29,13 +29,16 @@ if($_REQUEST['request']=='insertActivity'){
     $cust_id=$data["cust_id"];
     $activity=$data["activity"];
     $time=$data["time"];
+    $curDate=$data["curDate"];
     $actId =$data["actId"];
     $status='failed';
     if(!empty($actId)){
-$select = mysqli_query($con ,"UPDATE `user_activity` SET `end_time` = '$time' WHERE `user_activity`.`id` = '$actId';");
+        
+$select = mysqli_query($con ,"UPDATE `user_activities` SET `end_time` = '$time' WHERE `user_activities`.`id` = '$actId';");
 $getId= '';
     }else{
-$select=mysqli_query($con,"INSERT INTO `user_activity`( `user_id`, `activity`, `start_time`) VALUES ($cust_id,'$activity','$time')");
+$select=mysqli_query($con,"INSERT INTO `user_activities`( `user_id`, `activity`,`cdate`, `start_time`) VALUES ($cust_id,'$activity','$curDate','$time')");
+
 $getId= mysqli_insert_id($con);
     }
 

@@ -9,6 +9,7 @@ import { config } from '../../config';
 import { AuthContext } from './Context';
 import { colors } from './Colors';
 import Timer from './Timer';
+import { format_date, getDateFormat } from '../../commonAction';
 // import axios from 'axios';
 export default function ActivityScreen () {
 
@@ -16,7 +17,7 @@ export default function ActivityScreen () {
     const cust_id = Users.userDetail.id
     const userName = Users.userDetail.name
     const [actId , setActId] =useState('')
-    console.log(`Usersqqqqq`, Users)
+    
 
     const [activityItems, setActivityItems] = useState( [
         { title: 'Running' }, { title: 'Cooking' }, { title: 'Working' }, { title: 'Reading' }, { title: 'Walking' }, { title: 'Sleeping' },
@@ -24,15 +25,20 @@ export default function ActivityScreen () {
     const [timerStart, setTimerStart] = useState( false )
 
     const fetchActivity = async (title,id) => {
-      let dataTime = new Date()
+      let dateTime = format_date(new Date(),true,4,'YYYY-MM-DD h:mm a')
+      let curDate= dateTime.substring(0,11)
+      let curTime= dateTime.substring(12,20)
+ 
         const data={
-            "time": dataTime,
+            "curDate" : curDate,
+            "time": curTime,
             "activity": title,
             "cust_id": id,
             "actId" : actId
         }
         console.log('data', data)
         const response = await fetchApi(config.TEST+'insertActivity',data);
+
         console.log(response.data,"lllll");
         setActId(response.data.actId)
       };

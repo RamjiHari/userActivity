@@ -9,7 +9,7 @@ export default function Timer(props) {
     const [start, setStart] = useState(props.start);
     const sec = Math.floor((time / 1000) % 60);
     const min = Math.floor((time / 60000) % 60);
-console.log('startstart', start)
+
     useEffect(() => {
 
       let interval = null;

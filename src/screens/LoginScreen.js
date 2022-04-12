@@ -8,8 +8,8 @@ import { config } from '../../config';
 export default function Loginscreen() {
 
   const navigation = useNavigation();
-  const [username,setusername] = useState("");
-  const [password,setpassword] = useState("");
+  const [username,setusername] = useState("ramesh");
+  const [password,setpassword] = useState("goodluck");
   const User = React.useContext(AuthContext);
 
   const onLogin = async() => {
@@ -25,11 +25,11 @@ export default function Loginscreen() {
     console.log('data', data)
     const response = await fetchApi(config.TEST+'loginUser',data);
     console.log('first', response)
-    if (response.data.status == 'success'){
+    if (response?.data?.status == 'success'){
     User.setUserToken(response.data.user.id)
     User.setUserDetail(response.data.user)
     }else{
-      alert('failed')
+      alert(response.error.data.message)
     }
      }
     else{
