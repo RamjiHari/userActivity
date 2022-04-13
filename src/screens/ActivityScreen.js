@@ -17,12 +17,43 @@ export default function ActivityScreen () {
     const cust_id = Users.userDetail.id
     const userName = Users.userDetail.name
     const [actId , setActId] =useState('')
-    
+    const [token, setToken] = useState(null)
+    const [timerStart, setTimerStart] = useState( false )
+    const [userItem,setUserItem] = useState([])
+    const groups = userItem.reduce((groups, obj) => {
+        const date = obj.cdate;
+        if (!groups[date]) {
+          groups[date] = [];
+        }
+        groups[date].push(obj);
+        return groups;
+      }, {});
+      
+      // Edit: to add it in the array format instead
+      const groupArrays = Object.keys(groups).map((date) => {
+        return {
+          date,
+          activitesDate: groups[date]
+        };
+      });
+
 
     const [activityItems, setActivityItems] = useState( [
         { title: 'Running' }, { title: 'Cooking' }, { title: 'Working' }, { title: 'Reading' }, { title: 'Walking' }, { title: 'Sleeping' },
     ] )
-    const [timerStart, setTimerStart] = useState( false )
+
+
+    useEffect(async() => {
+        if(cust_id){
+        const data = {
+            "cust_id": cust_id,
+        }
+        const response = await fetchApi(config.TEST+'collectActivityRecord',data);
+        console.log('response.data', response.data)
+        setUserItem(response.data)
+    }
+    }, [token,cust_id])
+    
 
     const fetchActivity = async (title,id) => {
       let dateTime = format_date(new Date(),true,4,'YYYY-MM-DD h:mm a')
@@ -36,11 +67,15 @@ export default function ActivityScreen () {
             "cust_id": id,
             "actId" : actId
         }
-        console.log('data', data)
         const response = await fetchApi(config.TEST+'insertActivity',data);
-
-        console.log(response.data,"lllll");
-        setActId(response.data.actId)
+        if(response.data.status == 'success'){
+            setActId(response.data.actId)
+            if(!response.data.actId){
+        setToken(Math.floor(Math.random() * 100) + 1)
+            }
+        }else{
+            alert('error')
+        }
       };
 
     const toggleExpand = ( title, expand, timerStart, key ) => {
@@ -151,45 +186,30 @@ export default function ActivityScreen () {
                 </View>
                 <ScrollView >
                     <View>
-                        <View style={styles.tractRecordDaysHeading}>
-                            <Text>Mar 31 2022</Text>
+                       {groupArrays.map((item,index)=>
+                       
+                       {
+                       
+                           return(
+                               <>
+                             
+                              <View style={styles.tractRecordDaysHeading} key={item.date} >
+                            <Text>{item.date}</Text>
                         </View>
-                        <View style={styles.trackRocordBox}>
-                            <Text>1.30pm</Text>
+                        {item.activitesDate.map((activitesDateItem,index)=>{ return(<View style={styles.trackRocordBox} key={activitesDateItem.id}>
+                            <Text>{activitesDateItem.start_time}</Text>
                             <Text>-</Text>
-                            <Text>1.30pm</Text>
+                            <Text>{activitesDateItem.end_time}</Text>
                             <Text>-</Text>
 
-                            <Text>Walking</Text>
-                        </View>
-                        <View style={styles.trackRocordBox}>
-                            <Text>1.30pm</Text>
-                            <Text>-</Text>
-                            <Text>1.30pm</Text>
-                            <Text>-</Text>
-                            <Text>Reading</Text>
-                        </View>
+                            <Text>{activitesDateItem.activity}</Text>
+                        </View>)})}
+                               </>
+                           )
+                       })}
                     </View>
 
-                    <View>
-                        <View style={styles.tractRecordDaysHeading}>
-                            <Text>Mar 30 2022</Text>
-                        </View>
-                        <View style={styles.trackRocordBox}>
-                            <Text>1.30pm</Text>
-                            <Text>-</Text>
-                            <Text>1.30pm</Text>
-                            <Text>-</Text>
-                            <Text>Sleeping</Text>
-                        </View>
-                        <View style={styles.trackRocordBox}>
-                            <Text>1.30pm</Text>
-                            <Text>-</Text>
-                            <Text>1.30pm</Text>
-                            <Text>-</Text>
-                            <Text>Walking</Text>
-                        </View>
-                    </View>
+                   
                 </ScrollView>
             </View>
         </View>

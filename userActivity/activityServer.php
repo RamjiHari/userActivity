@@ -56,5 +56,19 @@ $response = [
  echo json_encode($response);
 }
 
+if($_REQUEST['request']=='collectActivityRecord'){
+    $data = json_decode(file_get_contents('php://input'), true);
+    $cust_id=$data["cust_id"];
+    $status='failed';
+    $sql = "SELECT * FROM `user_activities` order by cdate desc";
+
+$result = mysqli_query($con,$sql);
+$datas = [];
+while($get = mysqli_fetch_assoc($result)){
+    $datas[] = $get;
+  }
+echo json_encode($datas);
+}
+
 
 ?>
