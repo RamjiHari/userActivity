@@ -33,7 +33,7 @@ if($_REQUEST['request']=='insertActivity'){
     $actId =$data["actId"];
     $status='failed';
     if(!empty($actId)){
-        
+
 $select = mysqli_query($con ,"UPDATE `user_activities` SET `end_time` = '$time' WHERE `user_activities`.`id` = '$actId';");
 $getId= '';
     }else{
@@ -60,7 +60,7 @@ if($_REQUEST['request']=='collectActivityRecord'){
     $data = json_decode(file_get_contents('php://input'), true);
     $cust_id=$data["cust_id"];
     $status='failed';
-    $sql = "SELECT * FROM `user_activities` order by cdate desc";
+    $sql = "SELECT * FROM `user_activities` order by id desc";
 
 $result = mysqli_query($con,$sql);
 $datas = [];

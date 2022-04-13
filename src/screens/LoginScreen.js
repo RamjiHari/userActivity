@@ -8,8 +8,8 @@ import { config } from '../../config';
 export default function Loginscreen() {
 
   const navigation = useNavigation();
-  const [username,setusername] = useState("ramesh");
-  const [password,setpassword] = useState("goodluck");
+  const [username,setusername] = useState("");
+  const [password,setpassword] = useState("");
   const User = React.useContext(AuthContext);
 
   const onLogin = async() => {
