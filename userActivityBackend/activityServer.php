@@ -47,6 +47,7 @@ if($_REQUEST['request']=='insertActivity'){
     $time=$data["time"];
     $curDate=$data["curDate"];
     $actId =$data["actId"];
+    $cust_email =$data["email"];
     $status='failed';
     if(!empty($actId)){
 

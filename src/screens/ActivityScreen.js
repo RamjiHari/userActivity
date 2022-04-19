@@ -16,6 +16,7 @@ export default function ActivityScreen () {
     const Users = React.useContext(AuthContext);
     const cust_id = Users.userDetail.id
     const userName = Users.userDetail.name
+    const userEmail = Users.userDetail.email
     const [actId , setActId] =useState('')
     const [token, setToken] = useState(null)
     const [timerStart, setTimerStart] = useState( false )
@@ -65,7 +66,8 @@ export default function ActivityScreen () {
             "time": curTime,
             "activity": title,
             "cust_id": id,
-            "actId" : actId
+            "actId" : actId,
+            "email" : userEmail
         }
         const response = await fetchApi(config.TEST+'insertActivity',data);
         if(response.data.status == 'success'){
