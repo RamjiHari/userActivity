@@ -24,6 +24,22 @@ $response = [
  echo json_encode($response);
 }
 
+if($_REQUEST['request']=='registerUser'){
+    $data = json_decode(file_get_contents('php://input'), true);
+    $login_user=$data["username"];
+    $login_pass=$data["password"];
+    $status='failed';
+    $inserts=mysqli_query($con,"INSERT INTO `user` (`name`, `email`, `password`) VALUES ('$login_user', '$login_user', '$login_pass')");
+        if($inserts){
+           $status='success';
+       }
+$response = [
+    "status" => $status
+  ];
+
+ echo json_encode($response);
+}
+
 if($_REQUEST['request']=='insertActivity'){
     $data = json_decode(file_get_contents('php://input'), true);
     $cust_id=$data["cust_id"];

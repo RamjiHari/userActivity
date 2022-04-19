@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Loginscreen from './src/screens/LoginScreen';
 import { AuthContext } from './src/screens/Context';
+import RegisterScreen from './src/screens/RegisterScreen';
 export default function App() {
   const Stack = createStackNavigator();
   const [userToken, setUserToken] = useState(null)
@@ -20,7 +21,12 @@ export default function App() {
         {/* <Stack.Screen options={{headerShown: false}} name="Login" component={Loginscreen} /> */}
         <Stack.Screen  name="Home" options={{headerShown: false}} component={ActivityScreen} />
       </Stack.Navigator>):
-      <Loginscreen/>}
+      <Stack.Navigator >
+        <Stack.Screen  name="Login" options={{headerShown: false}} component={Loginscreen} />
+        <Stack.Screen  name="Register" options={{headerShown: false}} component={RegisterScreen} />
+
+        </Stack.Navigator>
+        }
     </NavigationContainer>
     </AuthContext.Provider>
 

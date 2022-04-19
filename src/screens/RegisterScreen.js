@@ -5,31 +5,29 @@ import { colors } from './Colors';
 import { AuthContext } from './Context';
 import { fetchApi } from './api';
 import { config } from '../../config';
-export default function Loginscreen(props) {
+export default function RegisterScreen(props) {
 
   const navigation = useNavigation();
   const [username,setusername] = useState("");
   const [password,setpassword] = useState("");
-  const User = React.useContext(AuthContext);
 
-  const onLogin = async() => {
+  const onRegister = async() => {
     Keyboard.dismiss()
     if(username && password){
       let dataTime = new Date()
       const data={
-        "request":"loginUser",
+        "request":"registerUser",
         "username" : username,
         "password" : password,
         "dataTime" : dataTime
     }
     console.log('data', data)
-    const response = await fetchApi(config.TEST+'loginUser',data);
-console.log('response.data', response)
+    const response = await fetchApi(config.TEST+'registerUser',data);
+    console.log('first', response)
     if (response?.data?.status == 'success'){
-    User.setUserToken(response.data.user.id)
-    User.setUserDetail(response.data.user)
+        props.navigation.navigate('Login')
     }else{
-      alert(response.error.data.message)
+      alert("Already Email is there.")
     }
      }
     else{
@@ -43,7 +41,7 @@ console.log('response.data', response)
         backgroundColor='#455A64'
         barStyle="light-content"
       />
-      <Text style={{color:colors.white, fontSize:20}}>Welcome to my App </Text>
+      <Text style={{color:colors.white, fontSize:20}}>Register to  App </Text>
       <TextInput
         style={styles.inputBox}
         placeholder="Email"
@@ -59,11 +57,11 @@ console.log('response.data', response)
         value={password}
         onChangeText={(password) => setpassword(password)}
       />
-      <TouchableOpacity style={styles.button} onPress={() => onLogin()}>
-        <Text style={styles.buttonText}>Login</Text>
+      <TouchableOpacity style={styles.button} onPress={() => onRegister()}>
+        <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() =>props.navigation.navigate('Register')}>
-        <Text style={styles.buttonText}>Registration</Text>
+      <TouchableOpacity style={styles.button} onPress={() =>props.navigation.navigate('Login')}>
+        <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
     </View>
   )
