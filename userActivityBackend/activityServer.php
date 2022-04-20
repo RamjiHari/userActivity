@@ -1,6 +1,11 @@
 <?php
 include './db_config.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
 // echo $_REQUEST['request'];die;
 
 if($_REQUEST['request']=='loginUser'){
@@ -50,13 +55,36 @@ if($_REQUEST['request']=='insertActivity'){
     $cust_email =$data["email"];
     $status='failed';
     if(!empty($actId)){
+$mail = new PHPMailer(true);
+$message = '<html><body>';
+$message .= '<h1 style="color:#f40;">Hi '.$cust_email.'!</h1>';
+$message .= '<p style="color:#080;font-size:18px;">You have finished your '.$activity.' Activity</p>';
+$message .= '</body></html>';
+$subject = 'Activity APP';
+$mail->isSMTP();                                            // Send using SMTP
+$mail->Host       = 'smtp.dreamhost.com';                    // Set the SMTP server to send through
+$mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+$mail->Username   = 'contact@allskills.in';                  // SMTP username
+$mail->Password   ='e6p3vwtY';                           // SMTP password
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+$mail->Port       = 587;                                    // TCP port to connect to
+$mail->setFrom('contact@allskills.in', 'All Skills | Learn and grow');
+$mail->addAddress($cust_email);     // Add a recipient
+$mail->addReplyTo('contact@allskills.in', 'All Skills | Learn and grow');
 
-$select = mysqli_query($con ,"UPDATE `user_activities` SET `end_time` = '$time' WHERE `user_activities`.`id` = '$actId';");
+// Content
+$mail->isHTML(true);                                  // Set email format to HTML
+$mail->Subject = $subject;
+$mail->Body    = $message;
+
+$mail->send();
+if($mail){
+    $select = mysqli_query($con ,"UPDATE `user_activities` SET `end_time` = '$time' WHERE `user_activities`.`id` = '$actId';");
 $getId= '';
+}
     }else{
-$select=mysqli_query($con,"INSERT INTO `user_activities`( `user_id`, `activity`,`cdate`, `start_time`) VALUES ($cust_id,'$activity','$curDate','$time')");
-
-$getId= mysqli_insert_id($con);
+    $select=mysqli_query($con,"INSERT INTO `user_activities`( `user_id`, `activity`,`cdate`, `start_time`) VALUES ($cust_id,'$activity','$curDate','$time')");
+    $getId= mysqli_insert_id($con);
     }
 
 if($select){
