@@ -50,7 +50,6 @@ export default function ActivityScreen () {
             "cust_id": cust_id,
         }
         const response = await fetchApi(config.TEST+'collectActivityRecord',data);
-        console.log('response.data', response.data)
         setUserItem(response.data)
     }
     }, [token,cust_id])
@@ -70,6 +69,7 @@ export default function ActivityScreen () {
             "email" : userEmail
         }
         const response = await fetchApi(config.TEST+'insertActivity',data);
+        console.log('responseeeeee', response)
         if(response.data.status == 'success'){
             setActId(response.data.actId)
             if(!response.data.actId){
@@ -175,7 +175,7 @@ export default function ActivityScreen () {
             </>
             <View style={styles.timerSection}>
 
-                <Text style={styles.headingText}>Start tracking</Text>
+                <Text style={styles.headingText}>{timerStart ? "Stop Tracking" : "Start Tracking"}</Text>
                 <AntDesign name={timerStart ? "pausecircle" : "play"} size={40} color="black" style={{ alignSelf: 'center' }} onPress={() => { tracktime( activityItems ) }} />
                 <View style={{alignContent:'center' ,justifyContent:'center',alignSelf:'center',marginTop:5}}>
            {timerStart && <Timer start={timerStart}/>}

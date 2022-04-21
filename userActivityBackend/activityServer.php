@@ -54,47 +54,63 @@ if($_REQUEST['request']=='insertActivity'){
     $actId =$data["actId"];
     $cust_email =$data["email"];
     $status='failed';
+    $start_time='';
+    $create_date='';
+    $end_time='';
     if(!empty($actId)){
-$mail = new PHPMailer(true);
-$message = '<html><body>';
-$message .= '<h1 style="color:#f40;">Hi '.$cust_email.'!</h1>';
-$message .= '<p style="color:#080;font-size:18px;">You have finished your '.$activity.' Activity</p>';
-$message .= '</body></html>';
-$subject = 'Activity APP';
-$mail->isSMTP();                                            // Send using SMTP
-$mail->Host       = 'smtp.dreamhost.com';                    // Set the SMTP server to send through
-$mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-$mail->Username   = 'contact@allskills.in';                  // SMTP username
-$mail->Password   ='e6p3vwtY';                           // SMTP password
-$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
-$mail->Port       = 587;                                    // TCP port to connect to
-$mail->setFrom('contact@allskills.in', 'All Skills | Learn and grow');
-$mail->addAddress($cust_email);     // Add a recipient
-$mail->addReplyTo('contact@allskills.in', 'All Skills | Learn and grow');
+        
 
-// Content
-$mail->isHTML(true);                                  // Set email format to HTML
-$mail->Subject = $subject;
-$mail->Body    = $message;
-
-$mail->send();
-if($mail){
-    $select = mysqli_query($con ,"UPDATE `user_activities` SET `end_time` = '$time' WHERE `user_activities`.`id` = '$actId';");
-$getId= '';
-}
+        $select = mysqli_query($con ,"UPDATE `user_activities` SET `end_time` = '$time' WHERE `user_activities`.`id` = '$actId'");
+        
+       $check = mysqli_query($con,"SELECT `cdate`, `start_time`, `end_time` FROM `user_activities` WHERE `id`='$actId'"); 
+       if(mysqli_num_rows($check)>0){
+       $row = mysqli_fetch_assoc($check);
+        $create_date = $row['cdate'];
+        $start_time = $row['start_time'];
+        $end_time = $row['end_time'];
+       }
+        $getId= '';
+         if($check){
+            $mail = new PHPMailer(true);
+            $message = '<html><body>';
+            $message .= '<h1 style="color:#f40;">Hi '.$cust_email.'!</h1>';
+            $message .= '<p style="color:#080;font-size:18px;">You have finished your '.$activity.' Activity</p>';
+            $message .= '</body></html>';
+            $subject = 'Activity APP';
+            $mail->isSMTP();                                            // Send using SMTP
+            $mail->Host       = 'smtp.dreamhost.com';                    // Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+            $mail->Username   = 'contact@allskills.in';                  // SMTP username
+            $mail->Password   ='e6p3vwtY';                           // SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+            $mail->Port       = 587;                                    // TCP port to connect to
+            $mail->setFrom('contact@allskills.in', 'All Skills | Learn and grow');
+            $mail->addAddress($cust_email);     // Add a recipient
+            $mail->addReplyTo('contact@allskills.in', 'All Skills | Learn and grow');
+            
+            // Content
+            $mail->isHTML(true);                                  // Set email format to HTML
+            $mail->Subject = $subject;
+            $mail->Body    = $message;
+            
+            $mail->send();
+            $getId= '';
+            }
     }else{
-    $select=mysqli_query($con,"INSERT INTO `user_activities`( `user_id`, `activity`,`cdate`, `start_time`) VALUES ($cust_id,'$activity','$curDate','$time')");
+    $check=mysqli_query($con,"INSERT INTO `user_activities`( `user_id`, `activity`,`cdate`, `start_time`) VALUES ($cust_id,'$activity','$curDate','$time')");
     $getId= mysqli_insert_id($con);
     }
 
-if($select){
-
+if($check){
     $status='success';
 }else{
     $status='failed';
 }
 $response = [
     "status" => $status,
+    "startTime" => $start_time,
+    "createDate" => $create_date,
+    "endTime" =>  $end_time,
     "actId" => $getId
   ];
 
@@ -105,7 +121,7 @@ if($_REQUEST['request']=='collectActivityRecord'){
     $data = json_decode(file_get_contents('php://input'), true);
     $cust_id=$data["cust_id"];
     $status='failed';
-    $sql = "SELECT * FROM `user_activities` order by id desc";
+    $sql = "SELECT * FROM `user_activities` WHERE `user_id`='$cust_id' order by id desc";
 
 $result = mysqli_query($con,$sql);
 $datas = [];

@@ -29,7 +29,7 @@ console.log('response.data', response)
     User.setUserToken(response.data.user.id)
     User.setUserDetail(response.data.user)
     }else{
-      alert(' UserName or password field cannot be empty.')
+      alert(' UserName or password wrong.')
     }
      }
     else{
