@@ -58,11 +58,11 @@ if($_REQUEST['request']=='insertActivity'){
     $create_date='';
     $end_time='';
     if(!empty($actId)){
-        
+
 
         $select = mysqli_query($con ,"UPDATE `user_activities` SET `end_time` = '$time' WHERE `user_activities`.`id` = '$actId'");
-        
-       $check = mysqli_query($con,"SELECT `cdate`, `start_time`, `end_time` FROM `user_activities` WHERE `id`='$actId'"); 
+
+       $check = mysqli_query($con,"SELECT `cdate`, `start_time`, `end_time` FROM `user_activities` WHERE `id`='$actId'");
        if(mysqli_num_rows($check)>0){
        $row = mysqli_fetch_assoc($check);
         $create_date = $row['cdate'];
@@ -74,7 +74,8 @@ if($_REQUEST['request']=='insertActivity'){
             $mail = new PHPMailer(true);
             $message = '<html><body>';
             $message .= '<h1 style="color:#f40;">Hi '.$cust_email.'!</h1>';
-            $message .= '<p style="color:#080;font-size:18px;">You have finished your '.$activity.' Activity</p>';
+            $message .= '<p style="color:#080;font-size:18px;">You have finished your '.$activity.' activity on </p>';
+            $message .= '<p style="color:#080;font-size:18px;">'.$create_date.' from '.$start_time.' to '.$end_time.'</p>';
             $message .= '</body></html>';
             $subject = 'Activity APP';
             $mail->isSMTP();                                            // Send using SMTP
@@ -87,12 +88,12 @@ if($_REQUEST['request']=='insertActivity'){
             $mail->setFrom('contact@allskills.in', 'All Skills | Learn and grow');
             $mail->addAddress($cust_email);     // Add a recipient
             $mail->addReplyTo('contact@allskills.in', 'All Skills | Learn and grow');
-            
+
             // Content
             $mail->isHTML(true);                                  // Set email format to HTML
             $mail->Subject = $subject;
             $mail->Body    = $message;
-            
+
             $mail->send();
             $getId= '';
             }
