@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -11,16 +11,18 @@ import { colors } from './Colors';
 import Timer from './Timer';
 import { format_date, getDateFormat } from '../../commonAction';
 // import axios from 'axios';
-export default function ActivityScreen () {
+export default function ActivityScreen (props) {
 
     const Users = React.useContext(AuthContext);
     const cust_id = Users.userDetail.id
     const userName = Users.userDetail.name
     const userEmail = Users.userDetail.email
+    const userAuthToken = Users.userToken
     const [actId , setActId] =useState('')
     const [token, setToken] = useState(null)
     const [timerStart, setTimerStart] = useState( false )
     const [userItem,setUserItem] = useState([])
+   const [loading, setLoading] = useState( false )
     const groups = userItem.reduce((groups, obj) => {
         const date = obj.cdate;
         if (!groups[date]) {
@@ -45,13 +47,17 @@ export default function ActivityScreen () {
 
 
     useEffect(async() => {
+        setLoading(true)
         if(cust_id){
         const data = {
             "cust_id": cust_id,
         }
         const response = await fetchApi(config.TEST+'collectActivityRecord',data);
         setUserItem(response.data)
+        setLoading(false)
     }
+    setLoading(false)
+
     }, [token,cust_id])
     
 
@@ -81,6 +87,7 @@ export default function ActivityScreen () {
       };
 
     const toggleExpand = ( title, expand, timerStart, key ) => {
+        if(userAuthToken){
         if ( timerStart && key == 'toggle' ) {
             alert( 'please stop timer then select another' )
         } else {
@@ -94,10 +101,14 @@ export default function ActivityScreen () {
             newArray[index].expand = !expand
             setActivityItems( newArray )
         }
+    }else{
+        props.navigation.navigate('Login')
+    }
     }
 
 
     const tracktime = ( items ) => {
+        if(userAuthToken){
         let findIfAnyExpand = items.some( o => 'expand' in o )
         if ( findIfAnyExpand ) {
             let findTrueExpand = items.some( function ( o ) { return o["expand"] === true; } )
@@ -128,21 +139,35 @@ export default function ActivityScreen () {
         } else {
             alert( 'please choose activity' )
         }
+    }else{
+        props.navigation.navigate('Login')
     }
-    // useEffect(() => {
-    // }, [timerStart])
+    }
+
+    const logOutHandler = () => {
+        Users.setUserToken(null)
+        props.navigation.navigate('Login')
+    }
+
+    if ( loading ) {
+        return (
+           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent', }}>
+              <ActivityIndicator size="large" color={colors.primaryColor} />
+           </View>
+        );
+     }
 
     return (
         <>
-        <View style={styles.welcomeContainer}>
+        {userAuthToken &&<View style={styles.welcomeContainer}>
             <View style={{flex:2}}>
             <Text style={styles.welcomeText}>welcome {userName}</Text>
             </View>
-            <TouchableOpacity style={styles.logOutContainer} onPress = {()=>Users.setUserToken(null)}>
+            <TouchableOpacity style={styles.logOutContainer} onPress = {()=>logOutHandler()}>
             <AntDesign name="logout" size={24} color="black" />
             <Text style={styles.logOutText}>logout</Text>
             </TouchableOpacity>
-            </View>
+            </View>}
         <View style={styles.activityItemContainer} >
 
             < >
@@ -186,8 +211,8 @@ export default function ActivityScreen () {
                 <View style={styles.trackRecordHeadingSection}>
                     <Text style={[styles.headingText, { paddingVertical: 5 }]}>Time tracked</Text>
                 </View>
-                <ScrollView >
-                    <View>
+                {userAuthToken ? <ScrollView >
+                     <View>
                        {groupArrays.map((item,index)=>
                        
                        {
@@ -209,10 +234,10 @@ export default function ActivityScreen () {
                                </>
                            )
                        })}
-                    </View>
+                    </View> 
 
                    
-                </ScrollView>
+                </ScrollView>: <View style ={{justifyContent:'center',alignItems:'center',marginTop:'50%'}}><Text>please Login then doing activity</Text></View>}
             </View>
         </View>
         </>

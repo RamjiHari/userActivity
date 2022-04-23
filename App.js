@@ -16,17 +16,12 @@ export default function App() {
   return (
 <AuthContext.Provider value = {user}>
      <NavigationContainer>
-     { userToken != null ?(
       <Stack.Navigator >
-        {/* <Stack.Screen options={{headerShown: false}} name="Login" component={Loginscreen} /> */}
         <Stack.Screen  name="Home" options={{headerShown: false}} component={ActivityScreen} />
-      </Stack.Navigator>):
-      <Stack.Navigator >
         <Stack.Screen  name="Login" options={{headerShown: false}} component={Loginscreen} />
         <Stack.Screen  name="Register" options={{headerShown: false}} component={RegisterScreen} />
-
-        </Stack.Navigator>
-        }
+      </Stack.Navigator>
+        
     </NavigationContainer>
     </AuthContext.Provider>
 

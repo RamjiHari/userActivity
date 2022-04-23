@@ -13,6 +13,8 @@ export default function Loginscreen(props) {
   const User = React.useContext(AuthContext);
 
   const onLogin = async() => {
+    // props.navigation.navigate('Home')
+
     Keyboard.dismiss()
     if(username && password){
       let dataTime = new Date()
@@ -28,6 +30,7 @@ console.log('response.data', response)
     if (response?.data?.status == 'success'){
     User.setUserToken(response.data.user.id)
     User.setUserDetail(response.data.user)
+    props.navigation.navigate('Home')
     }else{
       alert(' UserName or password wrong.')
     }
@@ -62,8 +65,8 @@ console.log('response.data', response)
       <TouchableOpacity style={styles.button} onPress={() => onLogin()}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() =>props.navigation.navigate('Register')}>
-        <Text style={styles.buttonText}>Registration</Text>
+      <TouchableOpacity  onPress={() =>props.navigation.navigate('Register')}>
+        <Text style={styles.buttonText}>Registration &#8594;</Text>
       </TouchableOpacity>
     </View>
   )

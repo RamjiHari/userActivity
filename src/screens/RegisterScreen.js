@@ -60,8 +60,8 @@ export default function RegisterScreen(props) {
       <TouchableOpacity style={styles.button} onPress={() => onRegister()}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() =>props.navigation.navigate('Login')}>
-        <Text style={styles.buttonText}>Login</Text>
+      <TouchableOpacity  onPress={() =>props.navigation.navigate('Login')}>
+        <Text style={styles.buttonText}>Login &#8594;</Text>
       </TouchableOpacity>
     </View>
   )
