@@ -46,7 +46,7 @@ console.log('response.data', response)
         backgroundColor='#455A64'
         barStyle="light-content"
       />
-      <Text style={{color:colors.white, fontSize:20}}>Welcome to my App </Text>
+      <Text style={{color:colors.white, fontSize:20}}>Welcome to Time Tracker </Text>
       <TextInput
         style={styles.inputBox}
         placeholder="Email"

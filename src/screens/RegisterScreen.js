@@ -41,7 +41,7 @@ export default function RegisterScreen(props) {
         backgroundColor='#455A64'
         barStyle="light-content"
       />
-      <Text style={{color:colors.white, fontSize:20}}>Register to  App </Text>
+      <Text style={{color:colors.white, fontSize:20}}>Register to Time Tracker </Text>
       <TextInput
         style={styles.inputBox}
         placeholder="Email"

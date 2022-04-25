@@ -77,17 +77,17 @@ if($_REQUEST['request']=='insertActivity'){
             $message .= '<p style="color:#080;font-size:18px;">You have finished your '.$activity.' activity on </p>';
             $message .= '<p style="color:#080;font-size:18px;">'.$create_date.' from '.$start_time.' to '.$end_time.'</p>';
             $message .= '</body></html>';
-            $subject = 'Activity APP';
+            $subject = 'Time Tracker';
             $mail->isSMTP();                                            // Send using SMTP
             $mail->Host       = 'smtp.dreamhost.com';                    // Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-            $mail->Username   = 'contact@allskills.in';                  // SMTP username
+            $mail->Username   = 'contact@ngazelabs.com';                  // SMTP username
             $mail->Password   ='e6p3vwtY';                           // SMTP password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
             $mail->Port       = 587;                                    // TCP port to connect to
-            $mail->setFrom('contact@allskills.in', 'All Skills | Learn and grow');
+            $mail->setFrom('contact@ngazelabs.com', 'Time Tracker | Track Your Activity');
             $mail->addAddress($cust_email);     // Add a recipient
-            $mail->addReplyTo('contact@allskills.in', 'All Skills | Learn and grow');
+            $mail->addReplyTo('contact@ngazelabs.com', 'Time Tracker | Track Your Activity');
 
             // Content
             $mail->isHTML(true);                                  // Set email format to HTML
