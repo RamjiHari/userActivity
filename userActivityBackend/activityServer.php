@@ -77,7 +77,7 @@ if($_REQUEST['request']=='insertActivity'){
             $message .= '<p style="color:#080;font-size:18px;">You have finished your '.$activity.' activity on </p>';
             $message .= '<p style="color:#080;font-size:18px;">'.$create_date.' from '.$start_time.' to '.$end_time.'</p>';
             $message .= '</body></html>';
-            $subject = 'Time Tracker';
+            $subject = 'Time Tracker App';
             $mail->isSMTP();                                            // Send using SMTP
             $mail->Host       = 'smtp.dreamhost.com';                    // Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
