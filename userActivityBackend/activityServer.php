@@ -71,6 +71,7 @@ if($_REQUEST['request']=='insertActivity'){
        }
         $getId= '';
          if($check){
+            try {
             $mail = new PHPMailer(true);
             $message = '<html><body>';
             $message .= '<h1 style="color:#f40;">Hi '.$cust_email.'!</h1>';
@@ -82,21 +83,23 @@ if($_REQUEST['request']=='insertActivity'){
             $mail->Host       = 'smtp.dreamhost.com';                    // Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
             $mail->Username   = 'contact@ngazelabs.com';                  // SMTP username
-            $mail->Password   ='e6p3vwtY';                           // SMTP password
+            $mail->Password   ='g9G^HCkr';                           // SMTP password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
             $mail->Port       = 587;                                    // TCP port to connect to
-            $mail->setFrom('contact@ngazelabs.com', 'Time Tracker | Track Your Activity');
+            $mail->setFrom('contact@ngazelabs.com', 'All Skills | Learn and grow');
             $mail->addAddress($cust_email);     // Add a recipient
-            $mail->addReplyTo('contact@ngazelabs.com', 'Time Tracker | Track Your Activity');
+            $mail->addReplyTo('contact@ngazelabs.com', 'All Skills | Learn and grow');
 
             // Content
             $mail->isHTML(true);                                  // Set email format to HTML
             $mail->Subject = $subject;
             $mail->Body    = $message;
-
             $mail->send();
             $getId= '';
+            }catch (phpmailerException $e) {
+
             }
+        }
     }else{
     $check=mysqli_query($con,"INSERT INTO `user_activities`( `user_id`, `activity`,`cdate`, `start_time`) VALUES ($cust_id,'$activity','$curDate','$time')");
     $getId= mysqli_insert_id($con);

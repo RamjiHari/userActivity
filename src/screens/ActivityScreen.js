@@ -31,7 +31,7 @@ export default function ActivityScreen (props) {
         groups[date].push(obj);
         return groups;
       }, {});
-      
+
       // Edit: to add it in the array format instead
       const groupArrays = Object.keys(groups).map((date) => {
         return {
@@ -53,19 +53,20 @@ export default function ActivityScreen (props) {
             "cust_id": cust_id,
         }
         const response = await fetchApi(config.TEST+'collectActivityRecord',data);
+        console.log('response.data', response.data)
         setUserItem(response.data)
         setLoading(false)
     }
     setLoading(false)
 
     }, [token,cust_id])
-    
+
 
     const fetchActivity = async (title,id) => {
       let dateTime = format_date(new Date(),true,4,'YYYY-MM-DD h:mm a')
       let curDate= dateTime.substring(0,11)
       let curTime= dateTime.substring(12,20)
- 
+
         const data={
             "curDate" : curDate,
             "time": curTime,
@@ -214,12 +215,12 @@ export default function ActivityScreen (props) {
                 {userAuthToken ? <ScrollView >
                      <View>
                        {groupArrays.map((item,index)=>
-                       
+
                        {
-                       
+
                            return(
                                <>
-                             
+
                               <View style={styles.tractRecordDaysHeading} key={item.date} >
                             <Text>{item.date}</Text>
                         </View>
@@ -234,9 +235,9 @@ export default function ActivityScreen (props) {
                                </>
                            )
                        })}
-                    </View> 
+                    </View>
 
-                   
+
                 </ScrollView>: <View style ={{justifyContent:'center',alignItems:'center',marginTop:'50%'}}><Text>please Login then doing activity</Text></View>}
             </View>
         </View>
